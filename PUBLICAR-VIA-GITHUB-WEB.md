@@ -1,6 +1,35 @@
 # 🌐 Como Adicionar Diagramas pelo GitHub Web
 
-## 📋 Passo a Passo Rápido
+## � Escolha Seu Editor
+
+O GitHub oferece **3 formas** de editar arquivos online:
+
+### 1. **GitHub Web Tradicional** (Mais Simples)
+- ✅ Interface básica de upload e edição
+- ✅ Funciona em qualquer navegador
+- ✅ Ideal para adicionar 1-2 diagramas
+- 📍 **Use esta seção:** Siga o "Passo a Passo Rápido" abaixo
+
+### 2. **github.dev** (Editor VSCode Online)
+- ✅ Editor completo tipo VSCode no navegador
+- ✅ Ambiente Linux com terminal bash
+- ✅ Gratuito e instantâneo
+- ⚠️ Limitação: Commit via interface (não pode executar `git push` no terminal)
+- 📍 **Como acessar:** Pressione `.` (ponto) enquanto estiver no repositório
+- 📍 **Ou acesse:** https://github.dev/charlieloganx23/fluxobizagi
+- 💡 **Melhor para:** Editar múltiplos arquivos de uma vez
+
+### 3. **GitHub Codespaces** (Ambiente Linux Completo)
+- ✅ VSCode completo na nuvem
+- ✅ Terminal bash funcional com git
+- ✅ Pode rodar scripts e instalar ferramentas
+- 💰 60 horas grátis por mês (depois paga)
+- 📍 **Como criar:** Botão verde "Code" → aba "Codespaces" → "Create codespace"
+- 💡 **Melhor para:** Trabalhos complexos ou usar scripts bash
+
+---
+
+## �📋 Passo a Passo Rápido
 
 ### PASSO 1: Fazer Upload dos Arquivos SVG
 
@@ -120,12 +149,60 @@
 
 ---
 
-## 💡 Vantagens vs. Scripts Locais
+## �️ Método Alternativo: github.dev (Editor VSCode Online)
+
+### Por que usar o github.dev?
+- ✅ Interface profissional tipo VSCode
+- ✅ Editar múltiplos arquivos simultaneamente
+- ✅ Preview do JSON formatado
+- ✅ Terminal bash integrado
+- ✅ 100% gratuito, sem limites
+
+### Como usar:
+
+**1. Abrir o editor:**
+- No repositório, pressione a tecla `.` (ponto)
+- **Ou acesse:** https://github.dev/charlieloganx23/fluxobizagi
+
+**2. Fazer upload dos SVGs:**
+- No painel esquerdo (Explorer), navegue até: `Tentar publicar/files/diagrams/`
+- Clique com botão direito na pasta `diagrams`
+- Selecione **"Upload..."**
+- Escolha seus arquivos SVG
+
+**3. Editar configuration.json.js:**
+- Abra o arquivo: `Tentar publicar/libs/js/json/configuration.json.js`
+- Adicione as novas entradas em `"pages":[...]`
+- O editor mostra erros de sintaxe em tempo real!
+
+**4. Gerar UUID (opcional - via terminal):**
+```bash
+# Abra o terminal (Ctrl + `)
+uuidgen  # Gera um ID único
+```
+
+**5. Commitar e enviar:**
+- Clique no ícone **Source Control** (3º botão à esquerda)
+- Revise as mudanças
+- Digite a mensagem: `Add: Novos diagramas`
+- Clique em **"Commit & Push"**
+
+### Vantagem sobre GitHub Web tradicional:
+- ✅ Vê todos os arquivos modificados de uma vez
+- ✅ Preview de sintaxe JSON colorida
+- ✅ Autocomplete e validação
+- ✅ Desfazer múltiplas mudanças facilmente
+
+---
+
+## �💡 Vantagens vs. Scripts Locais
 
 | Método | Vantagens | Desvantagens |
 |--------|-----------|--------------|
-| **GitHub Web** | ✅ Funciona de qualquer computador<br>✅ Não precisa instalar nada<br>✅ Fácil reverter erros | ❌ Mais manual<br>❌ Risco de erro de sintaxe JSON<br>❌ Não valida antes de salvar |
-| **Scripts Locais** | ✅ Totalmente automático<br>✅ Valida JSON<br>✅ Impossível quebrar | ❌ Só funciona no seu computador<br>❌ Precisa configurar PowerShell |
+| **GitHub Web** | ✅ Funciona de qualquer computador<br>✅ Não precisa instalar nada<br>✅ Fácil reverter erros | ❌ Mais manual<br>❌ Risco de erro de sintaxe JSON<br>❌ Interface básica |
+| **github.dev** | ✅ Editor profissional VSCode<br>✅ Validação de sintaxe em tempo real<br>✅ Terminal bash integrado<br>✅ Gratuito ilimitado | ❌ Git push só via interface<br>❌ Requer navegador moderno |
+| **Codespaces** | ✅ Ambiente Linux completo<br>✅ Terminal bash full com git<br>✅ Pode rodar scripts complexos | 💰 Apenas 60h grátis/mês<br>❌ Leva ~30s para iniciar |
+| **Scripts Locais** | ✅ Totalmente automático<br>✅ Valida JSON<br>✅ Impossível quebrar<br>✅ Gratuito ilimitado | ❌ Só funciona no seu computador<br>❌ Precisa configurar PowerShell |
 
 ---
 

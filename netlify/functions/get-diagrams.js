@@ -1,7 +1,8 @@
 // Netlify Function: get-diagrams.js
 // Retorna a lista de diagramas do configuration.json.js
 
-const https = require('https');
+const fs = require('fs');
+const path = require('path');
 
 exports.handler = async (event, context) => {
     // Configuração CORS
@@ -18,14 +19,24 @@ exports.handler = async (event, context) => {
     }
 
     try {
-        // URL do configuration.json.js no GitHub (raw)
-        const configUrl = 'https://raw.githubusercontent.com/charlieloganx23/fluxobizagi/main/Tentar%20publicar/libs/js/json/configuration.json.js';
+        // Caminho para o arquivo configuration.json.js no deploy
+        const configPath = path.join(process.cwd(), 'Tentar publicar', 'libs', 'js', 'json', 'configuration.json.js');
         
-        // Busca o arquivo
-        const configContent = await fetchFromGitHub(configUrl);
+        // Lê o arquivo localmente
+        const configContent = fs.readFileSync(configPath, 'utf8');
+        
+        console.log('Primeiros 50 caracteres:', configContent.substring(0, 50));
         
         // Remove o prefixo "Bizagi.AppModel = " e converte para JSON
-        const jsonString = configContent.replace(/^Bizagi\.AppModel\s*=\s*/, '').trim();
+        let jsonString = configContent.replace(/^Bizagi\.AppModel\s*=\s*/, '').trim();
+        
+        // Se ainda começar com caracteres não-JSON, tente remover manualmente
+        if (jsonString.startsWith('Bizagi')) {
+            jsonString = jsonString.substring(jsonString.indexOf('{'));
+        }
+        
+        console.log('Primeiros 50 caracteres após replace:', jsonString.substring(0, 50));
+        
         const config = JSON.parse(jsonString);
         
         return {
@@ -50,20 +61,3 @@ exports.handler = async (event, context) => {
         };
     }
 };
-
-// Helper para fazer requisição HTTPS
-function fetchFromGitHub(url) {
-    return new Promise((resolve, reject) => {
-        https.get(url, (res) => {
-            let data = '';
-            res.on('data', (chunk) => data += chunk);
-            res.on('end', () => {
-                if (res.statusCode === 200) {
-                    resolve(data);
-                } else {
-                    reject(new Error(`GitHub retornou status ${res.statusCode}`));
-                }
-            });
-        }).on('error', reject);
-    });
-}

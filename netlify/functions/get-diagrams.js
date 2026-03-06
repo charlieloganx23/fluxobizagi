@@ -1,8 +1,7 @@
 // Netlify Function: get-diagrams.js
 // Retorna a lista de diagramas do configuration.json.js
 
-const fs = require('fs');
-const path = require('path');
+const https = require('https');
 
 exports.handler = async (event, context) => {
     // Configuração CORS
@@ -19,13 +18,14 @@ exports.handler = async (event, context) => {
     }
 
     try {
-        // Caminho para o arquivo configuration.json.js no deploy
-        const configPath = path.join(process.cwd(), 'Tentar publicar', 'libs', 'js', 'json', 'configuration.json.js');
+        // Determina a URL base do site (funciona tanto local quanto em produção)
+        const siteUrl = process.env.URL || process.env.DEPLOY_PRIME_URL || 'http://localhost:8888';
+        const configUrl = `${siteUrl}/libs/js/json/configuration.json.js`;
         
-        // Lê o arquivo localmente
-        const configContent = fs.readFileSync(configPath, 'utf8');
+        console.log('Buscando configuração de:', configUrl);
         
-        console.log('Primeiros 50 caracteres:', configContent.substring(0, 50));
+        // Busca o arquivo do próprio site publicado
+        const configContent = await fetchUrl(configUrl);
         
         // Remove o prefixo "Bizagi.AppModel = " e converte para JSON
         let jsonString = configContent.replace(/^Bizagi\.AppModel\s*=\s*/, '').trim();
@@ -34,8 +34,6 @@ exports.handler = async (event, context) => {
         if (jsonString.startsWith('Bizagi')) {
             jsonString = jsonString.substring(jsonString.indexOf('{'));
         }
-        
-        console.log('Primeiros 50 caracteres após replace:', jsonString.substring(0, 50));
         
         const config = JSON.parse(jsonString);
         
@@ -61,3 +59,21 @@ exports.handler = async (event, context) => {
         };
     }
 };
+
+// Helper para fazer requisição HTTP/HTTPS
+function fetchUrl(url) {
+    return new Promise((resolve, reject) => {
+        const protocol = url.startsWith('https') ? https : require('http');
+        protocol.get(url, (res) => {
+            let data = '';
+            res.on('data', (chunk) => data += chunk);
+            res.on('end', () => {
+                if (res.statusCode === 200) {
+                    resolve(data);
+                } else {
+                    reject(new Error(`Servidor retornou status ${res.statusCode}`));
+                }
+            });
+        }).on('error', reject);
+    });
+}

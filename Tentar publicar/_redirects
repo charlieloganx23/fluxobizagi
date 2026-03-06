@@ -1,3 +1,4 @@
 # Redirecionar todas as rotas para index.html (para SPA)
 # Mas permitir que arquivos estáticos sejam servidos primeiro
-/*    /index.html   200
+# DESABILITADO TEMPORARIAMENTE - Estava interceptando arquivos .js e .css
+# /*    /index.html   200

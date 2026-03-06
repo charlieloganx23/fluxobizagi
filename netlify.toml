@@ -53,10 +53,9 @@
   to = "/admin/index.html"
   status = 200
 
-# Fallback para SPA
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  force = false
-  conditions = {Role = ["admin"]}
+# Fallback desabilitado temporariamente para debug
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200
+#   force = false

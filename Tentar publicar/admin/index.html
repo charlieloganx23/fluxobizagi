@@ -38,9 +38,12 @@
                     <form id="uploadForm">
                         <div class="form-group">
                             <label for="svgFile">📁 Arquivo SVG:</label>
-                            <div class="file-upload-wrapper">
+                            <div class="file-upload-wrapper" id="fileUploadArea">
                                 <input type="file" id="svgFile" accept=".svg" required>
-                                <p class="file-name" id="fileName">Nenhum arquivo selecionado</p>
+                                <div class="upload-prompt">
+                                    <p>🖱️ Clique para selecionar ou arraste o arquivo aqui</p>
+                                    <p class="file-name" id="fileName">Nenhum arquivo selecionado</p>
+                                </div>
                             </div>
                         </div>
 

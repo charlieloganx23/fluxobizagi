@@ -143,22 +143,36 @@ header h1 {
 .file-upload-wrapper {
     border: 2px dashed var(--border-color);
     border-radius: 8px;
-    padding: 20px;
+    padding: 30px;
     text-align: center;
-    transition: border-color 0.3s;
+    transition: all 0.3s;
+    cursor: pointer;
+    background-color: #f9f9f9;
 }
 
 .file-upload-wrapper:hover {
     border-color: var(--primary-color);
+    background-color: #f0f0f0;
 }
 
 .file-upload-wrapper input[type="file"] {
     display: none;
 }
 
+.upload-prompt {
+    user-select: none;
+}
+
+.upload-prompt > p:first-child {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 10px;
+}
+
 .file-name {
     margin-top: 10px;
     color: #666;
+    font-size: 0.9em;
 }
 
 .btn-primary,

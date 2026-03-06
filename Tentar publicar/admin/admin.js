@@ -26,9 +26,43 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     
     // Event listener para upload de arquivo
-    document.getElementById('svgFile').addEventListener('change', (e) => {
+    const fileInput = document.getElementById('svgFile');
+    const fileUploadArea = document.getElementById('fileUploadArea');
+    const fileNameDisplay = document.getElementById('fileName');
+    
+    fileInput.addEventListener('change', (e) => {
         const fileName = e.target.files[0]?.name || 'Nenhum arquivo selecionado';
-        document.getElementById('fileName').textContent = fileName;
+        fileNameDisplay.textContent = fileName;
+    });
+    
+    // Tornar área clicável
+    fileUploadArea.addEventListener('click', () => {
+        fileInput.click();
+    });
+    
+    // Drag and drop
+    fileUploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileUploadArea.style.borderColor = '#4CAF50';
+        fileUploadArea.style.backgroundColor = 'rgba(76, 175, 80, 0.1)';
+    });
+    
+    fileUploadArea.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        fileUploadArea.style.borderColor = '';
+        fileUploadArea.style.backgroundColor = '';
+    });
+    
+    fileUploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileUploadArea.style.borderColor = '';
+        fileUploadArea.style.backgroundColor = '';
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            fileNameDisplay.textContent = files[0].name;
+        }
     });
     
     // Event listener para submit do formulário

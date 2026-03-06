@@ -66,7 +66,13 @@ exports.handler = async (event, context) => {
         });
         
         const configContent = Buffer.from(configFile.content, 'base64').toString('utf8');
-        const jsonString = configContent.replace(/^Bizagi\.AppModel\s*=\s*/, '').trim();
+        let jsonString = configContent.replace(/^Bizagi\.AppModel\s*=\s*/, '').trim();
+        
+        // Fallback: Se ainda começar com "Bizagi", remover manualmente
+        if (jsonString.startsWith('Bizagi')) {
+            jsonString = jsonString.substring(jsonString.indexOf('{'));
+        }
+        
         const config = JSON.parse(jsonString);
 
         // 4. Encontra o diagrama a remover

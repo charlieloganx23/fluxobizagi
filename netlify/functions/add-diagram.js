@@ -42,7 +42,10 @@ exports.handler = async (event, context) => {
         const octokit = new Octokit({ auth: githubToken });
         const owner = 'charlieloganx23';
         const repo = 'fluxobizagi';
-        const branch = 'main';
+        
+        // Detecta branch atual do deploy (BRANCH env var do Netlify)
+        const branch = process.env.BRANCH || process.env.HEAD || 'main';
+        console.log('Branch detectada:', branch);
 
         // 1. Busca o SHA do último commit da branch
         const { data: refData } = await octokit.git.getRef({

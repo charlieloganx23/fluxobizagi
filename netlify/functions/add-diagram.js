@@ -48,12 +48,14 @@ exports.handler = async (event, context) => {
         console.log('Branch detectada:', branch);
 
         // 1. Busca o SHA do último commit da branch
+        console.log(`Buscando referência para branch: heads/${branch}`);
         const { data: refData } = await octokit.git.getRef({
             owner,
             repo,
             ref: `heads/${branch}`
         });
         const latestCommitSha = refData.object.sha;
+        console.log('Último commit SHA:', latestCommitSha);
 
         // 2. Busca a árvore do commit
         const { data: commitData } = await octokit.git.getCommit({
@@ -154,6 +156,7 @@ exports.handler = async (event, context) => {
             }
         ];
 
+        console.log('Criando árvore com', tree.length, 'arquivos, base tree:', baseTreeSha);
         const { data: newTree } = await octokit.git.createTree({
             owner,
             repo,
@@ -192,13 +195,24 @@ exports.handler = async (event, context) => {
 
     } catch (error) {
         console.error('Erro ao adicionar diagrama:', error);
+        
+        // Captura detalhes extras do erro da API do GitHub
+        const errorDetails = {
+            message: error.message,
+            status: error.status,
+            response: error.response?.data
+        };
+        
+        console.error('Detalhes do erro:', JSON.stringify(errorDetails, null, 2));
+        
         return {
             statusCode: 500,
             headers,
             body: JSON.stringify({
                 success: false,
                 error: error.message,
-                details: error.stack
+                status: error.status,
+                details: error.response?.data || error.stack
             })
         };
     }

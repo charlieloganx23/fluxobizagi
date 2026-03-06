@@ -239,14 +239,15 @@ async function handleUpload(e) {
         const data = await response.json();
         
         if (data.success) {
-            showMessage('uploadMessage', `✅ Diagrama "${name}" adicionado com sucesso! Deploy em andamento...`, 'success');
+            showMessage('uploadMessage', `✅ Diagrama "${name}" commitado no GitHub!`, 'success');
             
             // Limpa formulário
             document.getElementById('uploadForm').reset();
             document.getElementById('fileName').textContent = 'Nenhum arquivo selecionado';
             
-            // Recarrega lista
-            setTimeout(() => loadDiagrams(), 2000);
+            // Aguarda deploy
+            const currentCount = currentDiagrams.length;
+            waitForDeploy('uploadMessage', currentCount + 1, 'adicionado');
         } else {
             throw new Error(data.error || 'Erro desconhecido');
         }
@@ -287,9 +288,12 @@ async function removeDiagram() {
         const data = await response.json();
         
         if (data.success) {
-            showMessage('removeMessage', `✅ Diagrama removido com sucesso!`, 'success');
-            loadDiagrams();
+            showMessage('removeMessage', `✅ Diagrama removido do GitHub!`, 'success');
             document.getElementById('diagramToRemove').value = '';
+            
+            // Aguarda deploy
+            const currentCount = currentDiagrams.length;
+            waitForDeploy('removeMessage', currentCount - 1, 'removido');
         } else {
             throw new Error(data.error || 'Erro desconhecido');
         }
@@ -313,4 +317,47 @@ function showMessage(elementId, text, type) {
     const element = document.getElementById(elementId);
     element.textContent = text;
     element.className = `message ${type}`;
+}
+
+// Verifica status do deploy aguardando mudanças
+async function waitForDeploy(elementId, expectedDiagramCount, action = 'atualizado') {
+    const startTime = Date.now();
+    const maxWaitTime = 60000; // 60 segundos
+    let dots = 0;
+    
+    const updateMessage = () => {
+        dots = (dots + 1) % 4;
+        const dotString = '.'.repeat(dots);
+        showMessage(elementId, `⏳ Aguardando deploy do Netlify${dotString}`, 'info');
+    };
+    
+    // Atualiza mensagem a cada segundo
+    const messageInterval = setInterval(updateMessage, 1000);
+    updateMessage();
+    
+    // Verifica deploy a cada 3 segundos
+    const checkInterval = setInterval(async () => {
+        try {
+            const response = await fetch('/api/get-diagrams');
+            const data = await response.json();
+            
+            if (data.success && data.totalDiagrams === expectedDiagramCount) {
+                clearInterval(checkInterval);
+                clearInterval(messageInterval);
+                showMessage(elementId, `✅ Deploy concluído! Diagrama ${action} com sucesso.`, 'success');
+                loadDiagrams();
+                return;
+            }
+            
+            // Timeout após 60 segundos
+            if (Date.now() - startTime > maxWaitTime) {
+                clearInterval(checkInterval);
+                clearInterval(messageInterval);
+                showMessage(elementId, '⚠️ Deploy em andamento. Pode levar alguns minutos. Atualize a lista manualmente.', 'info');
+            }
+        } catch (error) {
+            // Continua tentando em caso de erro
+            console.log('Verificando deploy...', error);
+        }
+    }, 3000);
 }

@@ -21,3 +21,13 @@ npm-debug.log*
 
 # Netlify
 .netlify/
+
+# Node.js
+node_modules/
+package-lock.json
+yarn.lock
+
+# Variáveis de ambiente (NUNCA commitar!)
+.env
+.env.local
+.env.production

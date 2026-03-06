@@ -1,9 +1,16 @@
 [build]
   # Define o diretório que contém os arquivos a serem publicados
-  publish = "public"
+  publish = "Tentar publicar"
   
   # Não há comando de build necessário pois é um site estático
   command = "echo 'Site estático - sem build necessário'"
+  
+  # Diretório das Netlify Functions (serverless)
+  functions = "netlify/functions"
+
+[functions]
+  # Bundler para as funções Node.js
+  node_bundler = "esbuild"
 
 # Configurações de headers para melhorar o desempenho
 [[headers]]
@@ -34,6 +41,19 @@
     Content-Type = "image/svg+xml; charset=utf-8"
 
 # Configuração de redirecionamentos (se necessário)
+# Redireciona chamadas de API para Netlify Functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# Redireciona /admin para a página de administração
+[[redirects]]
+  from = "/admin"
+  to = "/admin/index.html"
+  status = 200
+
+# Fallback para SPA
 [[redirects]]
   from = "/*"
   to = "/index.html"

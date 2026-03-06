@@ -1,0 +1,20 @@
+{
+  "name": "repositorio-processos-admin",
+  "version": "1.0.0",
+  "description": "Interface administrativa para gerenciar diagramas Bizagi",
+  "private": true,
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'No build needed'"
+  },
+  "dependencies": {
+    "@octokit/rest": "^20.0.2",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.17.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

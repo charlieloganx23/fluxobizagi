@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administração - Repositório de Processos</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔧 Gerenciador de Diagramas</h1>
+            <p class="subtitle">Interface administrativa para gerenciar processos Bizagi</p>
+        </header>
+
+        <div class="auth-section" id="authSection">
+            <div class="card">
+                <h2>🔐 Autenticação</h2>
+                <p>Insira a senha de administrador para continuar:</p>
+                <input type="password" id="passwordInput" placeholder="Senha de administrador">
+                <button onclick="authenticate()">Entrar</button>
+                <p class="error" id="authError"></p>
+            </div>
+        </div>
+
+        <div class="admin-panel" id="adminPanel" style="display: none;">
+            <div class="nav-tabs">
+                <button class="tab-button active" onclick="showTab('add')">➕ Adicionar Diagrama</button>
+                <button class="tab-button" onclick="showTab('list')">📋 Listar Diagramas</button>
+                <button class="tab-button" onclick="showTab('remove')">🗑️ Remover Diagrama</button>
+            </div>
+
+            <!-- Tab: Adicionar Diagrama -->
+            <div class="tab-content" id="addTab">
+                <div class="card">
+                    <h2>➕ Adicionar Novo Diagrama</h2>
+                    
+                    <form id="uploadForm">
+                        <div class="form-group">
+                            <label for="svgFile">📁 Arquivo SVG:</label>
+                            <div class="file-upload-wrapper">
+                                <input type="file" id="svgFile" accept=".svg" required>
+                                <p class="file-name" id="fileName">Nenhum arquivo selecionado</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="diagramName">📝 Nome do Diagrama (exibido no site):</label>
+                            <input type="text" id="diagramName" placeholder="Ex: Fluxo de Atendimento" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="diagramType">📊 Tipo de Diagrama:</label>
+                            <select id="diagramType" onchange="toggleParentSelect()">
+                                <option value="macro">Processo Macro (Principal)</option>
+                                <option value="subprocess">Subprocesso</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="parentProcessGroup" style="display: none;">
+                            <label for="parentProcess">👆 Processo Pai:</label>
+                            <select id="parentProcess">
+                                <option value="">Selecione o processo pai...</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="author">👤 Autor:</label>
+                            <input type="text" id="author" value="Usuário" placeholder="Nome do autor">
+                        </div>
+
+                        <button type="submit" class="btn-primary">
+                            <span id="uploadBtnText">🚀 Adicionar Diagrama</span>
+                            <span id="uploadLoader" class="loader" style="display: none;"></span>
+                        </button>
+
+                        <div class="message" id="uploadMessage"></div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Tab: Listar Diagramas -->
+            <div class="tab-content" id="listTab" style="display: none;">
+                <div class="card">
+                    <h2>📋 Diagramas Publicados</h2>
+                    <button onclick="loadDiagrams()" class="btn-secondary">🔄 Atualizar Lista</button>
+                    <div id="diagramsList" class="diagrams-list">
+                        <p class="loading">Carregando...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Remover Diagrama -->
+            <div class="tab-content" id="removeTab" style="display: none;">
+                <div class="card">
+                    <h2>🗑️ Remover Diagrama</h2>
+                    <p class="warning">⚠️ Atenção: Esta ação não pode ser desfeita!</p>
+                    
+                    <div class="form-group">
+                        <label for="diagramToRemove">Selecione o diagrama a remover:</label>
+                        <select id="diagramToRemove">
+                            <option value="">Carregando...</option>
+                        </select>
+                    </div>
+
+                    <button onclick="removeDiagram()" class="btn-danger">
+                        🗑️ Remover Diagrama
+                    </button>
+
+                    <div class="message" id="removeMessage"></div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Repositório: <a href="https://github.com/charlieloganx23/fluxobizagi" target="_blank">github.com/charlieloganx23/fluxobizagi</a></p>
+            <p>Deploy: <a href="https://repositorioprocessos.netlify.app" target="_blank">repositorioprocessos.netlify.app</a></p>
+        </footer>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

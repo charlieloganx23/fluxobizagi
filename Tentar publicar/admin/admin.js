@@ -354,6 +354,7 @@ async function waitForDeploy(elementId, expectedDiagramCount, action = 'atualiza
                 clearInterval(checkInterval);
                 clearInterval(messageInterval);
                 showMessage(elementId, '⚠️ Deploy em andamento. Pode levar alguns minutos. Atualize a lista manualmente.', 'info');
+                return;
             }
         } catch (error) {
             // Continua tentando em caso de erro
